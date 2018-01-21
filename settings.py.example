@@ -1,0 +1,12 @@
+HOST = '0.0.0.0'
+CLUSTER_NUMBER = '1'
+DEBUG = False
+
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@127.0.0.1/rigadmin'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
+SECURITY_PASSWORD_SALT = 'wtf'
+SECRET_KEY = 'test123'
+
+SECRET_TOKEN = 'imhappy'
