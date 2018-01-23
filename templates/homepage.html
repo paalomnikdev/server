@@ -1,0 +1,10 @@
+{% extends 'admin/index.html' %}
+
+{%  block body %}
+    <a href="/admin/rig/?flt1_0=1" type="button" class="btn btn-success">
+        Rigs online: {{ online }}
+    </a>
+    <a href="/admin/rig/?flt1_0=0" type="button" class="btn btn-danger">
+        Rigs offline: {{ offline }}
+    </a>
+{% endblock %}

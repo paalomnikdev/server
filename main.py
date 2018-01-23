@@ -1,5 +1,5 @@
-from flask import Flask, request, redirect, jsonify
-from flask_admin import Admin, AdminIndexView
+from flask import Flask, request, redirect, jsonify, url_for
+from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib import sqla
 from flask_admin.menu import MenuLink
 from init import db
@@ -7,6 +7,11 @@ from flask_security import RoleMixin, UserMixin, SQLAlchemyUserDatastore, Securi
 from wtforms.fields import PasswordField
 import datetime
 from pprint import pprint
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.interval import IntervalTrigger
+import requests
 
 
 app = Flask(__name__, template_folder='templates')
@@ -20,18 +25,6 @@ roles_users = db.Table(
 )
 
 
-class Role(db.Model, RoleMixin):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
-    def __str__(self):
-        return self.name
-
-    def __hash__(self):
-        return hash(self.name)
-
-
 class Rig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True)
@@ -42,9 +35,29 @@ class Rig(db.Model):
     def find_by_ip(cls, ip):
         return cls.query.filter_by(ip_address=ip).first()
 
+    @classmethod
+    def get_total(cls, active):
+        return cls.query.filter_by(active=active).count()
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+
+
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+    def __str__(self):
+        return self.name
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 class User(db.Model, UserMixin):
@@ -67,10 +80,12 @@ security = Security(app, user_datastore)
 class RigAdmin(sqla.ModelView):
     can_create = False
     can_delete = False
-    # can_edit = False
+    can_edit = False
+    list_template = 'rig_list_template.html'
     list_row_actions = ('detail_view',)
-    column_searchable_list = ('ip_address', 'active')
-    column_sortable_list = ('active', 'ip_address')
+    column_searchable_list = ('ip_address', 'name')
+    column_sortable_list = ('active', 'ip_address', 'name')
+    column_filters = ('active', 'name')
     form_widget_args = {
         'ip_address': {
             'readonly': True
@@ -80,8 +95,12 @@ class RigAdmin(sqla.ModelView):
         },
     }
 
-    def on_model_change(self, form, model, is_created):
-        pprint(model.active)
+    @expose('/details/<id>')
+    def details_view(self, id):
+        model = self.session.query(self.model).get(id)
+        if not model:
+            return redirect(url_for('.index'))
+        return self.render('rig_details_template.html', model=model)
 
 
 class UserAdmin(sqla.ModelView):
@@ -149,11 +168,49 @@ class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
         return current_user.is_authenticated
 
+    @expose('/')
+    def index(self):
+        return self.render(
+            'homepage.html',
+            online=Rig.get_total(True),
+            offline=Rig.get_total(False)
+        )
+
 
 class LogoutMenuLink(MenuLink):
 
     def is_accessible(self):
         return current_user.is_authenticated
+
+
+def check_rigs():
+    with app.app_context():
+        rigs = Rig.find_all()
+        for rig in rigs:
+            try:
+                r = requests.get('http://{ip}/check-alive'.format(ip=rig.ip_address))
+                r = r.json()
+                if 'alive' in r and r['alive'] == 'yes':
+                    rig.active = True
+                else:
+                    rig.active = False
+            except:
+                rig.active = False
+
+            rig.save_to_db()
+
+
+scheduler = BackgroundScheduler()
+scheduler.start()
+scheduler.add_job(
+    func=check_rigs,
+    trigger=IntervalTrigger(seconds=180),
+    id='check_rigs',
+    name='Checking rigs online',
+    replace_existing=True,
+    max_instances=1
+)
+atexit.register(lambda: scheduler.shutdown())
 
 
 admin = Admin(
