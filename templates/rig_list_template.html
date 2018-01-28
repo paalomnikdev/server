@@ -1,9 +1,7 @@
 {% extends 'admin/model/list.html' %}
 
 {% block list_row_actions %}
-    {% if model.active == True %}
-        <a href="{{ url_for('.details_view', id=get_pk_value(row)) }}">
-            <span class="glyphicon glyphicon-eye-open"></span>
-        </a>
-    {% endif %}
+    <a href="{{ url_for('.details_view', id=get_pk_value(row)) }}">
+        <span class="glyphicon glyphicon-eye-open"></span>
+    </a>
 {% endblock %}
