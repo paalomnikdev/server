@@ -143,7 +143,9 @@ class UserAdmin(sqla.ModelView):
 
 class RoleAdmin(sqla.ModelView):
     column_searchable_list = ('name', 'description')
-
+    can_delete = False
+    can_edit = False
+    
     def is_accessible(self):
         return current_user.has_role('admin')
 
