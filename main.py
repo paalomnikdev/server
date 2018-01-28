@@ -102,6 +102,19 @@ class RigAdmin(sqla.ModelView):
         if not model:
             flash('Rig not found', 'error')
             return self.render('rig_not_found_template.html')
+        if not model.active:
+            flash('Rig is not active', 'error')
+            return redirect('/admin/rig')
+
+        try:
+            r = requests.get('http://{ip}/gpu-control/fullinfo'.format(ip=model.ip_address))
+            rig_details = r.json()
+        except:
+            model.active = False
+            model.save_to_db()
+            flash('Rig is not active', 'error')
+            return redirect('/admin/rig')
+        pprint(rig_details)
         return self.render('rig_details_template.html', model=model)
 
 
