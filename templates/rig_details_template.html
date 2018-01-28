@@ -16,8 +16,12 @@
             <tr>
                 <td>{{ key }}</td>
                 <td>{{ gpu['name'] }}</td>
-                <td>{{ gpu['fan_speed'] }}</td>
-                <td>{{ gpu['power_limit'] }}</td>
+                <td>
+                    <input readonly type="text" value="{{ gpu['fan_speed'] }}" name="fan_speed" id="fan-speed">
+                </td>
+                <td>
+                    <input readonly value="{{ gpu['power_limit'] }}" type="text" name="power_limit" id="power-limit">
+                </td>
                 <td>{{ gpu['temperature'] }}</td>
             </tr>
         {% endfor %}
