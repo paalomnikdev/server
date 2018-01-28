@@ -101,7 +101,7 @@ class RigAdmin(sqla.ModelView):
         pprint(model)
         if not model:
             flash('Rig not found', 'error')
-            return self.render('rig_not_found_template.html')
+            return redirect('/admin/rig')
         if not model.active:
             flash('Rig is not active', 'error')
             return redirect('/admin/rig')
@@ -114,8 +114,8 @@ class RigAdmin(sqla.ModelView):
             model.save_to_db()
             flash('Rig is not active', 'error')
             return redirect('/admin/rig')
-        pprint(rig_details)
-        return self.render('rig_details_template.html', model=model)
+
+        return self.render('rig_details_template.html', model=model, rig_details=rig_details)
 
 
 class UserAdmin(sqla.ModelView):
