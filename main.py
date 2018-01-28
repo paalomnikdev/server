@@ -98,16 +98,10 @@ class RigAdmin(sqla.ModelView):
     @expose('/details/<id>')
     def details_view(self, id):
         model = self.session.query(self.model).get(id)
+        pprint(model)
         if not model:
             return redirect(url_for('.index'))
-        try:
-            gpu_details = requests.get('http://{ip_address}:6789/gpu-control/fullinfo'.format(ip_address=model.ip_address))
-            gpu_details = gpu_details.json()
-        except:
-            model.active = False
-            model.save_to_db()
-            return redirect(url_for('.index'))
-        return self.render('rig_details_template.html', model=model, details=gpu_details)
+        return self.render('rig_details_template.html', model=model)
 
 
 class UserAdmin(sqla.ModelView):
