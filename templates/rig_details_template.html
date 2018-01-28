@@ -1,12 +1,12 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-    {% for gpu in rig_details.device_info.items() %}
+    {% for key,gpu in rig_details.device_info.items() %}
         <ul>
-            <li>Name: {{ gpu.name }}</li>
-            <li>Fan speed: {{ gpu.fans_speed }} %</li>
-            <li>Power limit: {{ gpu.power_limit }} W</li>
-            <li>Temperature: {{ gpu.temperature }} C</li>
+            <li>Name: {{ gpu['name'] }}</li>
+            <li>Fan speed: {{ gpu['fans_speed'] }} %</li>
+            <li>Power limit: {{ gpu['power_limit'] }} W</li>
+            <li>Temperature: {{ gpu['temperature'] }} C</li>
         </ul>
     {% endfor %}
 {% endblock %}
