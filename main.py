@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, jsonify, url_for
+from flask import Flask, request, redirect, jsonify, url_for, flash
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib import sqla
 from flask_admin.menu import MenuLink
@@ -100,7 +100,8 @@ class RigAdmin(sqla.ModelView):
         model = self.session.query(self.model).get(id)
         pprint(model)
         if not model:
-            return redirect(url_for('.index'))
+            flash('Rig not found', 'error')
+            return self.render('rig_not_found_template.html')
         return self.render('rig_details_template.html', model=model)
 
 
