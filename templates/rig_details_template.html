@@ -1,12 +1,26 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-    {% for key,gpu in rig_details.device_info.items() %}
-        <ul>
-            <li>Name: {{ gpu['name'] }}</li>
-            <li>Fan speed: {{ gpu['fan_speed'] }} %</li>
-            <li>Power limit: {{ gpu['power_limit'] }} W</li>
-            <li>Temperature: {{ gpu['temperature'] }} C</li>
-        </ul>
-    {% endfor %}
+    <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Number</th>
+        <th>Name</th>
+        <th>Fans Speed (%)</th>
+        <th>Power Limit(W)</th>
+        <th>Temperature(C)</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for key,gpu in rig_details.device_info.items() %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ gpu['name'] }}</td>
+                <td>{{ gpu['fan_speed'] }}</td>
+                <td>{{ gpu['power_limit'] }}</td>
+                <td>{{ gpu['temperature'] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
