@@ -140,20 +140,17 @@ def register_rig():
     if secret != app.config['SECRET_TOKEN']:
         return jsonify({'message': 'Who are you? I\'m not called you!Go away!'})
     name = request.form.get('name')
-    ip_address = request.form.get('command_ip')
+    ip_address = '{addr}:6789'.format(addr=request.remote_addr)
     rig = Rig.find_by_ip(ip_address)
-    pprint(secret)
-    pprint(name)
-    pprint(ip_address)
     if rig is not None:
         rig.active = True
-        rig.save_to_db()
     else:
         rig = Rig()
         rig.ip_address = ip_address
         rig.name = name
         rig.active = True
-        rig.save_to_db()
+
+    rig.save_to_db()
 
     return jsonify({'message': 'Added successfully'})
 
