@@ -1,11 +1,11 @@
-from main import app as application, user_datastore, utils
+from main import app, user_datastore, utils
 from init import db
 
 if __name__ == "__main__":
-    db.init_app(application)
+    db.init_app(app)
 
 
-    @application.before_first_request
+    @app.before_first_request
     def create_tables():
         db.create_all()
         user_datastore.find_or_create_role(name='admin', description='Administrator')
@@ -24,5 +24,4 @@ if __name__ == "__main__":
 
         db.session.commit()
 
-    application.run()
-    
+    app.run()
