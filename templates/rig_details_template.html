@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-    {% for gpu in rig_details.device_info %}
+    {% for gpu in rig_details.device_info.items() %}
         <ul>
             <li>Name: {{ gpu.name }}</li>
             <li>Fan speed: {{ gpu.fans_speed }} %</li>

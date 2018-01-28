@@ -114,7 +114,6 @@ class RigAdmin(sqla.ModelView):
             model.save_to_db()
             flash('Rig is not active', 'error')
             return redirect('/admin/rig')
-
         return self.render('rig_details_template.html', model=model, rig_details=rig_details)
 
 
