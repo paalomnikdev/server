@@ -3,13 +3,14 @@
 {% block body %}
     <table class="table table-hover">
     <thead>
-      <tr>
-        <th>Number</th>
-        <th>Name</th>
-        <th>Fans Speed (%)</th>
-        <th>Power Limit(W)</th>
-        <th>Temperature(C)</th>
-      </tr>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Fans Speed (%)</th>
+            <th>Power Limit(W)</th>
+            <th>Temperature(C)</th>
+            <th>Actions</th>
+        </tr>
     </thead>
     <tbody>
         {% for key,gpu in rig_details.device_info.items() %}
@@ -23,6 +24,10 @@
                     <input readonly value="{{ gpu['power_limit'] }}" type="text" name="power_limit" id="power-limit">
                 </td>
                 <td>{{ gpu['temperature'] }}</td>
+                <td>
+                    <span class="glyphicon glyphicon-ok-sign" style="cursor: pointer"></span>
+                    <span class="glyphicon glyphicon-remove-sign" style="cursor: pointer"></span>
+                </td>
             </tr>
         {% endfor %}
     </tbody>
