@@ -57,7 +57,7 @@
                         </td>
                         <td>
                             <span
-                                    class="glyphicon glyphicon-ok-sign"
+                                    class="save glyphicon glyphicon-ok-sign"
                                     style="cursor: pointer"></span>
                             <span
                                     class="reset glyphicon glyphicon-remove-sign"
@@ -83,6 +83,18 @@
                             jQuery(this).data('val')
                         );
                     });
+            });
+
+            jQuery('.save').on('click', function () {
+                var data = {};
+                jQuery(this)
+                    .parent()
+                    .parent()
+                    .find('.changeable')
+                    .each(function () {
+                        data[jQuery(this).attr('name')] = jQuery(this).val();
+                    });
+                console.log(data);
             });
         });
     </script>
