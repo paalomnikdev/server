@@ -19,21 +19,49 @@
                     <tr data-id="{{ key }}">
                         <td>{{ gpu['name'] }}</td>
                         <td>
-                            <input type="text" value="{{ gpu['fan_speed'] }}" name="fan_speed" id="fan-speed">
+                            <input
+                                    data-val="{{ gpu['fan_speed'] }}"
+                                    class="changeable"
+                                    type="text"
+                                    value="{{ gpu['fan_speed'] }}"
+                                    name="fan_speed"
+                                    id="fan-speed">
                         </td>
                         <td>
-                            <input value="{{ gpu['power_limit'] }}" type="text" name="power_limit" id="power-limit">
+                            <input
+                                    data-val="{{ gpu['power_limit'] }}"
+                                    class="changeable"
+                                    value="{{ gpu['power_limit'] }}"
+                                    type="text"
+                                    name="power_limit"
+                                    id="power-limit">
                         </td>
                         <td>{{ gpu['temperature'] }}</td>
                         <td>
-                            <input value="{{ gpu['memory_overclock'] }}" type="text" name="memory_clock" id="memory-clock">
+                            <input
+                                    data-val="{{ gpu['memory_overclock'] }}"
+                                    class="changeable"
+                                    value="{{ gpu['memory_overclock'] }}"
+                                    type="text"
+                                    name="memory_clock"
+                                    id="memory-clock">
                         </td>
                         <td>
-                            <input value="{{ gpu['core_overclock'] }}" type="text" name="gpu_clock" id="gpu-clock">
+                            <input
+                                    data-val="{{ gpu['core_overclock'] }}"
+                                    class="changeable"
+                                    value="{{ gpu['core_overclock'] }}"
+                                    type="text"
+                                    name="gpu_clock"
+                                    id="gpu-clock">
                         </td>
                         <td>
-                            <span class="glyphicon glyphicon-ok-sign" style="cursor: pointer"></span>
-                            <span class="glyphicon glyphicon-remove-sign" style="cursor: pointer"></span>
+                            <span
+                                    class="glyphicon glyphicon-ok-sign"
+                                    style="cursor: pointer"></span>
+                            <span
+                                    class="reset glyphicon glyphicon-remove-sign"
+                                    style="cursor: pointer"></span>
                         </td>
                     </tr>
                 {% endfor %}
@@ -43,5 +71,15 @@
 {% endblock %}
 
 {% block tail %}
-
+    <script>
+        jQuery(document).on('ready', function () {
+            jQuery('.reset').on('click', function () {
+                jQuery(this).parent('td.changeable').each(function () {
+                    jQuery(this).val(
+                        jQuery(this).data('val');
+                    );
+                });
+            });
+        });
+    </script>
 {% endblock %}

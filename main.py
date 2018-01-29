@@ -98,7 +98,6 @@ class RigAdmin(sqla.ModelView):
     @expose('/details/<id>')
     def details_view(self, id):
         model = self.session.query(self.model).get(id)
-        pprint(model)
         if not model:
             flash('Rig not found', 'error')
             return redirect('/admin/rig')
@@ -122,11 +121,6 @@ class UserAdmin(sqla.ModelView):
     column_exclude_list = ('password',)
     form_excluded_columns = ('password', 'created_at')
     column_auto_select_related = True
-    form_widget_args = {
-        'email': {
-            'readonly': True
-        },
-    }
 
     def is_accessible(self):
         return current_user.has_role('admin')
