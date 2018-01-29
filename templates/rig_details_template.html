@@ -1,43 +1,45 @@
 {% extends 'admin/base.html' %}
 
 {% block body %}
-    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Fans Speed (%)</th>
-            <th>Power Limit(W)</th>
-            <th>Temperature(C)</th>
-            <th>Memory Overclock(MHz)</th>
-            <th>Core Overclock(MHz)</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for key,gpu in rig_details.device_info.items() %}
-            <tr data-id="{{ key }}">
-                <td>{{ gpu['name'] }}</td>
-                <td>
-                    <input type="text" value="{{ gpu['fan_speed'] }}" name="fan_speed" id="fan-speed">
-                </td>
-                <td>
-                    <input value="{{ gpu['power_limit'] }}" type="text" name="power_limit" id="power-limit">
-                </td>
-                <td>{{ gpu['temperature'] }}</td>
-                <td>
-                    <input value="{{ gpu['memory_clock'] }}" type="text" name="memory_clock" id="memory-clock">
-                </td>
-                <td>
-                    <input value="{{ gpu['gpu_clock'] }}" type="text" name="gpu_clock" id="gpu-clock">
-                </td>
-                <td>
-                    <span class="glyphicon glyphicon-ok-sign" style="cursor: pointer"></span>
-                    <span class="glyphicon glyphicon-remove-sign" style="cursor: pointer"></span>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-  </table>
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Fans Speed (%)</th>
+                    <th>Power Limit(W)</th>
+                    <th>Temperature(C)</th>
+                    <th>Memory Overclock(MHz)</th>
+                    <th>Core Overclock(MHz)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key,gpu in rig_details.device_info.items() %}
+                    <tr data-id="{{ key }}">
+                        <td>{{ gpu['name'] }}</td>
+                        <td>
+                            <input type="text" value="{{ gpu['fan_speed'] }}" name="fan_speed" id="fan-speed">
+                        </td>
+                        <td>
+                            <input value="{{ gpu['power_limit'] }}" type="text" name="power_limit" id="power-limit">
+                        </td>
+                        <td>{{ gpu['temperature'] }}</td>
+                        <td>
+                            <input value="{{ gpu['memory_clock'] }}" type="text" name="memory_clock" id="memory-clock">
+                        </td>
+                        <td>
+                            <input value="{{ gpu['gpu_clock'] }}" type="text" name="gpu_clock" id="gpu-clock">
+                        </td>
+                        <td>
+                            <span class="glyphicon glyphicon-ok-sign" style="cursor: pointer"></span>
+                            <span class="glyphicon glyphicon-remove-sign" style="cursor: pointer"></span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 
 {% block tail %}
