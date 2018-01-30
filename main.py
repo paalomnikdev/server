@@ -97,7 +97,7 @@ class RigAdmin(sqla.ModelView):
 
     @expose('/set-config/<rig_id>', methods=['POST'])
     def set_config(self, rig_id):
-        params = request.json()
+        params = request.get_json()
         pprint(params)
 
     @expose('/details/<id>')

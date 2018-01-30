@@ -106,7 +106,8 @@
                 jQuery.ajax({
                     type: 'post',
                     url: '{{ url_for('.set_config', rig_id=model.id) }}',
-                    data: data
+                    data: data,
+                    dataType: 'json'
                 })
                     .then(function () {
                         jQuery(this).toggle();
