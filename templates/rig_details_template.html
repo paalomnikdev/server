@@ -113,7 +113,7 @@
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
                     }.bind(this))
-                    .catch(function () {
+                    .error(function () {
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
                     });
