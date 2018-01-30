@@ -99,6 +99,7 @@ class RigAdmin(sqla.ModelView):
     def set_config(self, rig_id):
         params = request.get_json()
         pprint(params)
+        return jsonify({'status': 'ok'})
 
     @expose('/details/<id>')
     def details_view(self, id):
