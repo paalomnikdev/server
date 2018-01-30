@@ -59,6 +59,7 @@
                             <span
                                     class="save glyphicon glyphicon-ok-sign"
                                     style="cursor: pointer"></span>
+                            <img src="/preloader.gif" alt="">
                             <span
                                     class="reset glyphicon glyphicon-remove-sign"
                                     style="cursor: pointer"></span>
@@ -97,7 +98,10 @@
                             data[jQuery(this).attr('name')] = jQuery(this).val();
                         });
                 data['id'] = $row.data('id');
-                console.log(data);
+                jQuery.ajax({
+                    type: 'post',
+                    url: '{{ url_for('.set_config', rig_id=model.id) }}'
+                });
             });
         });
     </script>

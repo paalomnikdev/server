@@ -14,7 +14,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 import requests
 
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='assets')
 app.config.from_pyfile('settings.py')
 app.secret_key = app.config['SECRET_KEY']
 
@@ -94,6 +94,11 @@ class RigAdmin(sqla.ModelView):
             'onclick': 'return false;'
         },
     }
+
+    @expose('/set-config/<rig_id>', methods=['POST'])
+    def set_config(self, rig_id):
+        params = request.json()
+        pprint(params)
 
     @expose('/details/<id>')
     def details_view(self, id):
