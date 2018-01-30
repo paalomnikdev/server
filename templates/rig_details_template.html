@@ -107,16 +107,16 @@
                     type: 'post',
                     url: '{{ url_for('.set_config', rig_id=model.id) }}',
                     data: data,
-                    dataType: 'json'
+                    dataType: 'json',
+                    error: function () {
+                        jQuery(this).toggle();
+                        jQuery('#preloader').toggle();
+                    }
                 })
                     .then(function () {
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
-                    }.bind(this))
-                    .error(function () {
-                        jQuery(this).toggle();
-                        jQuery('#preloader').toggle();
-                    });
+                    }.bind(this));
             });
         });
     </script>
