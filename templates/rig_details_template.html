@@ -59,7 +59,10 @@
                             <span
                                     class="save glyphicon glyphicon-ok-sign"
                                     style="cursor: pointer"></span>
-                            <img src="/preloader.gif" alt="">
+                            <img
+                                    id="preloader"
+                                    style="display: none;"
+                                    src="/preloader.gif" alt="">
                             <span
                                     class="reset glyphicon glyphicon-remove-sign"
                                     style="cursor: pointer"></span>
@@ -87,6 +90,8 @@
             });
 
             jQuery('.save').on('click', function () {
+                jQuery(this).toggle();
+                jQuery('#preloader').toggle();
                 var data = {};
                 var $row = jQuery(this)
                                 .parent()
@@ -100,8 +105,17 @@
                 data['id'] = $row.data('id');
                 jQuery.ajax({
                     type: 'post',
-                    url: '{{ url_for('.set_config', rig_id=model.id) }}'
-                });
+                    url: '{{ url_for('.set_config', rig_id=model.id) }}',
+                    data: data
+                })
+                    .then(function () {
+                        jQuery(this).toggle();
+                        jQuery('#preloader').toggle();
+                    }.bind(this))
+                    .catch(function () {
+                        jQuery(this).toggle();
+                        jQuery('#preloader').toggle();
+                    });
             });
         });
     </script>
