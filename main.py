@@ -97,7 +97,7 @@ class RigAdmin(sqla.ModelView):
 
     @expose('/set-config/<rig_id>', methods=['POST'])
     def set_config(self, rig_id):
-        params = request.get_json()
+        params = request.form
         pprint(params)
         return jsonify({'status': 'ok'})
 
