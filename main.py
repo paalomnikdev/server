@@ -36,6 +36,10 @@ class Rig(db.Model):
         return cls.query.filter_by(ip_address=ip).first()
 
     @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
     def get_total(cls, active):
         return cls.query.filter_by(active=active).count()
 
@@ -98,8 +102,16 @@ class RigAdmin(sqla.ModelView):
     @expose('/set-config/<rig_id>', methods=['POST'])
     def set_config(self, rig_id):
         params = request.form
-        pprint(params)
-        return jsonify({'status': 'ok'})
+        success = True
+        try:
+            rig = Rig.find_by_id(id)
+            r = requests.post('http://{ip}/set-config'.format(ip=rig.ip_address), params)
+            r = r.json()
+            if 'success' not in r or not r['success']:
+                success = False
+        except:
+            success = False
+        return jsonify({'success': success})
 
     @expose('/details/<id>')
     def details_view(self, id):

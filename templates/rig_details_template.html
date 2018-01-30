@@ -1,5 +1,7 @@
 {% extends 'admin/base.html' %}
-
+{% block head %}
+    <link rel="stylesheet" href="/css/toastr.css">
+{% endblock %}
 {% block body %}
     <div class="container">
         <table class="table table-hover">
@@ -75,6 +77,7 @@
 {% endblock %}
 
 {% block tail %}
+    <script src="/js/toastr.js" type="text/javascript"></script>
     <script>
         jQuery(document).on('ready', function () {
             jQuery('.reset').on('click', function () {
@@ -111,11 +114,25 @@
                     error: function () {
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
+                        jQuery.toast({
+                            text: 'Settings not applied. Please check logs.',
+                            showHideTransition: 'slide',
+                            hideAfter: 5000,
+                            position: 'top-right',
+                            bgColor: 'red'
+                        });
                     }
                 })
                     .then(function () {
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
+                        jQuery.toast({
+                            text: 'Settings successfully applied.',
+                            showHideTransition: 'slide',
+                            hideAfter: 5000,
+                            position: 'top-right',
+                            bgColor: 'green'
+                        });
                     }.bind(this));
             });
         });
