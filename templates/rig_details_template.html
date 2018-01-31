@@ -108,7 +108,7 @@
                 data['id'] = $row.data('id');
                 jQuery.ajax({
                     type: 'post',
-                    url: '123',
+                    url: '{{ url_for('.set_config', rig_id=model.id) }}',
                     data: data,
                     dataType: 'json',
                     error: function () {
