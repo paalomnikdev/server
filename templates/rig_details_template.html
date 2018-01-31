@@ -106,7 +106,8 @@
                             data[jQuery(this).attr('name')] = jQuery(this).val();
                         });
                 data['id'] = $row.data('id');
-                jQuery.ajax({
+                try {
+                    jQuery.ajax({
                     type: 'post',
                     url: '123',
                     data: data,
@@ -134,6 +135,11 @@
                             bgColor: 'green'
                         });
                     }.bind(this));
+                } catch (e) {
+                    jQuery(this).toggle();
+                    jQuery('#preloader').toggle();
+                }
+
             });
         });
     </script>
