@@ -124,10 +124,18 @@
                     }
                 })
                     .then(function (data) {
-                        console.log(typeof data);
-                        console.log(data);
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
+                        if (!data.success) {
+                            jQuery.toast({
+                                text: 'Settings not applied. Please check logs.',
+                                showHideTransition: 'slide',
+                                hideAfter: 5000,
+                                position: 'top-right',
+                                bgColor: 'red'
+                            });
+                            return;
+                        }
                         jQuery.toast({
                             text: 'Settings successfully applied.',
                             showHideTransition: 'slide',
