@@ -128,7 +128,7 @@
                         jQuery('#preloader').toggle();
                         if (!data.success) {
                             jQuery.toast({
-                                text: 'Settings not applied. Please check logs.',
+                                text: data.message ? data.message : 'Settings not applied. Please check logs.',
                                 showHideTransition: 'slide',
                                 hideAfter: 5000,
                                 position: 'top-right',
