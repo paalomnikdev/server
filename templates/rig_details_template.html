@@ -106,14 +106,13 @@
                             data[jQuery(this).attr('name')] = jQuery(this).val();
                         });
                 data['id'] = $row.data('id');
-                try {
-                    jQuery.ajax({
+                jQuery.ajax({
                     type: 'post',
                     url: '123',
                     data: data,
                     dataType: 'json',
                     error: function () {
-                        jQuery(this).toggle();
+                        jQuery('.save').toggle();
                         jQuery('#preloader').toggle();
                         jQuery.toast({
                             text: 'Settings not applied. Please check logs.',
@@ -135,11 +134,6 @@
                             bgColor: 'green'
                         });
                     }.bind(this));
-                } catch (e) {
-                    jQuery(this).toggle();
-                    jQuery('#preloader').toggle();
-                }
-
             });
         });
     </script>
