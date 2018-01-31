@@ -104,7 +104,7 @@ class RigAdmin(sqla.ModelView):
         params = request.form
         success = True
         try:
-            rig = Rig.find_by_id(id)
+            rig = Rig.find_by_id(rig_id)
             r = requests.post('http://{ip}/gpu-control/set-config'.format(ip=rig.ip_address), params)
             r = r.json()
             if 'success' not in r or not r['success']:
