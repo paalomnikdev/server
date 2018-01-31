@@ -123,7 +123,9 @@
                         });
                     }
                 })
-                    .then(function () {
+                    .then(function (data) {
+                        console.log(typeof data);
+                        console.log(data);
                         jQuery(this).toggle();
                         jQuery('#preloader').toggle();
                         jQuery.toast({
