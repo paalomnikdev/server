@@ -103,14 +103,14 @@ class RigAdmin(sqla.ModelView):
     def set_config(self, rig_id):
         params = request.form
         success = True
-        try:
-            rig = Rig.find_by_id(rig_id)
-            r = requests.post('http://{ip}/gpu-control/set-config'.format(ip=rig.ip_address), params)
-            r = r.json()
-            if 'success' not in r or not r['success']:
-                success = False
-        except:
-            success = False
+        # try:
+        rig = Rig.find_by_id(rig_id)
+        r = requests.post('http://{ip}/gpu-control/set-config'.format(ip=rig.ip_address), params)
+        r = r.json()
+            # if 'success' not in r or not r['success']:
+            #     success = False
+        # except:
+        #     success = False
         return jsonify({'success': success})
 
     @expose('/details/<id>')
