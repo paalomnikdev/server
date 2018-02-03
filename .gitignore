@@ -2,3 +2,4 @@ venv
 settings.py
 .idea
 __pycache__
+templates/.well-known/*

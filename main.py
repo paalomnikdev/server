@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, jsonify, url_for, flash
+from flask import Flask, request, redirect, jsonify, url_for, flash, render_template
 from flask_admin import Admin, AdminIndexView, expose
 from flask_admin.contrib import sqla
 from flask_admin.menu import MenuLink
@@ -189,6 +189,9 @@ def register_rig():
 def index():
     return redirect('/admin')
 
+@app.route('/.well-known/<path:path>')
+def ssl_cert(path):
+    return render_template('.well-known/' + path)
 
 class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
