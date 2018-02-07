@@ -30,6 +30,7 @@ class RigStats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     rig_id = db.Column(db.Integer, index=True)
     gpu_number = db.Column(db.Integer)
+    name = db.Column(db.String(255), default='Unnamed Card')
     fan_speed = db.Column(db.String(255), default='0')
     power_limit = db.Column(db.String(255), default='0')
     temperature = db.Column(db.String(255), default='0')
@@ -226,6 +227,7 @@ def register_rig():
             rig_stat.temperature = value['temperature']
             rig_stat.memory_overclock = value['memory_overclock']
             rig_stat.core_overclock = value['core_overclock']
+            rig_stat.name = value['name']
             rig_stat.save_to_db()
 
     return jsonify({'message': 'Added successfully'})
@@ -283,7 +285,9 @@ def check_rigs():
                     rig_stat.temperature = value['temperature']
                     rig_stat.memory_overclock = value['memory_overclock']
                     rig_stat.core_overclock = value['core_overclock']
+                    rig_stat.name = value['name']
                     rig_stat.gpu_number = key
+                    rig_stat.rig_id = rig.id
                     rig_stat.save_to_db()
             except:
                 rig.active = False
