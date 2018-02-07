@@ -203,9 +203,9 @@ def register_rig():
         rig.active = True
 
     rig.save_to_db()
-
+    pprint(request.form.get('stats'))
     try:
-        stats = json.loads(request.form.get('stats'))
+        stats = request.form.get('stats')
     except:
         stats = {}
 
