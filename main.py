@@ -133,8 +133,15 @@ class RigAdmin(sqla.ModelView):
             pprint('http://{ip}/gpu-control/set-config'.format(ip=rig.ip_address))
             r = requests.post('http://{ip}/gpu-control/set-config'.format(ip=rig.ip_address), params)
             r = r.json()
+            rig_stats = RigStats.find_by_rig_id_and_gpu_num(rig_id, params['id'])
+            rig_stats.fan_speed = params['fan_speed']
+            rig_stats.power_limit = params['power_limit']
+            rig_stats.memory_overclock = params['memory_clock']
+            rig_stats.core_overclock = params['gpu_clock']
             if 'success' not in r or not r['success']:
                 success = False
+            else:
+                rig_stats.save_to_db()
         except:
             success = False
         return jsonify({'success': success})
