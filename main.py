@@ -12,6 +12,7 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 import requests
+import json
 
 
 app = Flask(__name__, template_folder='templates', static_url_path='', static_folder='assets')
@@ -23,6 +24,29 @@ roles_users = db.Table(
     db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
 )
+
+
+class RigStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rig_id = db.Column(db.Integer, index=True)
+    gpu_number = db.Column(db.Integer)
+    fan_speed = db.Column(db.String(255), default='0')
+    power_limit = db.Column(db.String(255), default='0')
+    temperature = db.Column(db.String(255), default='0')
+    memory_overclock = db.Column(db.String(255), default='0')
+    core_overclock = db.Column(db.String(255), default='0')
+
+    @classmethod
+    def find_by_rig_id_and_gpu_num(cls, rig_id, gpu_number):
+        return cls.query.filter_by(rig_id=rig_id, gpu_number=gpu_number).first()
+
+    @classmethod
+    def find_by_rig_id(cls, rig_id):
+        return cls.query.filter_by(rig_id=rig_id)
+
+    def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
 
 
 class Rig(db.Model):
@@ -125,8 +149,7 @@ class RigAdmin(sqla.ModelView):
             return redirect('/admin/rig')
 
         try:
-            r = requests.get('http://{ip}/gpu-control/fullinfo'.format(ip=model.ip_address))
-            rig_details = r.json()
+            rig_details = RigStats.find_by_rig_id(model.id)
         except:
             model.active = False
             model.save_to_db()
@@ -181,6 +204,23 @@ def register_rig():
 
     rig.save_to_db()
 
+    try:
+        stats = json.loads(request.form.get('stats'))
+    except:
+        stats = {}
+
+    if stats:
+        for key, value in stats.items():
+            rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
+            if rig_stat is None:
+                rig_stat = RigStats
+            rig_stat.fan_speed = value['fan_speed']
+            rig_stat.power_limit = value['power_limit']
+            rig_stat.temperature = value['temperature']
+            rig_stat.memory_overclock = value['memory_overclock']
+            rig_stat.core_overclock = value['core_overclock']
+            rig_stat.save_to_db()
+
     return jsonify({'message': 'Added successfully'})
 
 
@@ -189,9 +229,11 @@ def register_rig():
 def index():
     return redirect('/admin')
 
+
 @app.route('/.well-known/<path:path>')
 def ssl_cert(path):
     return render_template('.well-known/' + path)
+
 
 class MyAdminIndexView(AdminIndexView):
     def is_accessible(self):
@@ -219,10 +261,22 @@ def check_rigs():
             try:
                 r = requests.get('http://{ip}/check-alive'.format(ip=rig.ip_address))
                 r = r.json()
-                if 'alive' in r and r['alive'] == 'yes':
+                if 'alive' in r and r['alive'] and 'result' in r and r['result']:
                     rig.active = True
                 else:
                     rig.active = False
+
+                for key, value in r['result'].items():
+                    rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
+                    if rig_stat is None:
+                        rig_stat = RigStats
+                    rig_stat.fan_speed = value['fan_speed']
+                    rig_stat.power_limit = value['power_limit']
+                    rig_stat.temperature = value['temperature']
+                    rig_stat.memory_overclock = value['memory_overclock']
+                    rig_stat.core_overclock = value['core_overclock']
+                    rig_stat.gpu_number = key
+                    rig_stat.save_to_db()
             except:
                 rig.active = False
 
