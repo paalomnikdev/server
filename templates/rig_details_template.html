@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for key,gpu in rig_details.device_info.items() %}
+                {% for gpu in rig_details.items() %}
                     <tr data-id="{{ gpu['gpu_number'] }}">
                         <td>{{ gpu['name'] }}</td>
                         <td>
