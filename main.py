@@ -219,7 +219,8 @@ def register_rig():
             pprint(rig_stat)
             print('--------')
 
-            rig_stat.gpu_number = key
+            rig_stat.rig_id = rig.id
+            rig_stat.gpu_number = int(key)
             rig_stat.fan_speed = value['fan_speed']
             rig_stat.power_limit = value['power_limit']
             rig_stat.temperature = value['temperature']
@@ -272,6 +273,7 @@ def check_rigs():
                 else:
                     rig.active = False
 
+                rig.save_to_db()
                 for key, value in r['result'].items():
                     rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
                     if rig_stat is None:
@@ -285,8 +287,7 @@ def check_rigs():
                     rig_stat.save_to_db()
             except:
                 rig.active = False
-
-            rig.save_to_db()
+                rig.save_to_db()
 
 
 scheduler = BackgroundScheduler()
