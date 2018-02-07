@@ -213,7 +213,7 @@ def register_rig():
         for key, value in stats.items():
             rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
             if rig_stat is None:
-                rig_stat = RigStats
+                rig_stat = RigStats()
 
             print('--------')
             pprint(rig_stat)
