@@ -214,6 +214,11 @@ def register_rig():
             rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
             if rig_stat is None:
                 rig_stat = RigStats
+
+            print('--------')
+            pprint(rig_stat)
+            print('--------')
+
             rig_stat.gpu_number = key
             rig_stat.fan_speed = value['fan_speed']
             rig_stat.power_limit = value['power_limit']
