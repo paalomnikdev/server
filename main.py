@@ -279,7 +279,7 @@ def check_rigs():
                 for key, value in r['result'].items():
                     rig_stat = RigStats.find_by_rig_id_and_gpu_num(rig.id, key)
                     if rig_stat is None:
-                        rig_stat = RigStats
+                        rig_stat = RigStats()
                     rig_stat.fan_speed = value['fan_speed']
                     rig_stat.power_limit = value['power_limit']
                     rig_stat.temperature = value['temperature']
